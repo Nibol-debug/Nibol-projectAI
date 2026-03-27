@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nibol — Portfolio</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Zen+Kaku+Gothic+New:wght@300;400;700&family=Shippori+Mincho:wght@400;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/profil.css">
+  <link rel="shortcut icon" href="image/hikari-tachibana.gif" type="image/x-icon">
+</head>
+
+<body>
+
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Nav -->
+  <nav id="navbar">
+    <a class="nav-logo" href="#"><span>N</span>IBOL</a>
+    <div style="font-size:0.65rem;letter-spacing:0.3em;color:rgba(245,240,239,0.35);">TKJ · RGi · ANGKATAN 34</div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <div class="hero">
+    <div class="sky"></div>
+
+    <!-- Stars -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Moon -->
+    <div class="moon"></div>
+
+    <!-- Fuji Mountain SVG -->
+    <div class="fuji-wrap">
+      <svg viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+        <!-- Far mountains (dark silhouette) -->
+        <path
+          d="M0,600 L0,420 L120,300 L240,380 L320,260 L420,340 L500,200 L600,320 L680,180 L760,280 L840,160 L920,300 L1000,200 L1080,320 L1160,240 L1240,340 L1320,260 L1440,340 L1440,600 Z"
+          fill="rgba(10,18,40,0.6)" />
+
+        <!-- Fuji base -->
+        <path d="M220,600 L720,160 L1220,600 Z" fill="#1a2e50" />
+        <!-- Fuji mid -->
+        <path d="M320,600 L720,160 L1120,600 Z" fill="#243d6a" />
+        <!-- Fuji upper -->
+        <path d="M460,600 L720,180 L980,600 Z" fill="#2e4d80" />
+        <!-- Fuji snow cap -->
+        <path
+          d="M650,215 C670,190 690,170 720,155 C750,170 770,190 790,215 C775,220 760,230 740,240 L720,245 L700,240 C680,230 665,220 650,215 Z"
+          fill="white" opacity="0.95" />
+        <!-- Snow detail -->
+        <path
+          d="M680,220 C695,210 710,205 720,202 C730,205 745,210 760,220 C748,224 738,228 720,232 C702,228 692,224 680,220 Z"
+          fill="rgba(240,248,255,0.7)" />
+        <!-- Snow left streak -->
+        <path d="M650,215 C640,230 635,250 638,270 C655,250 668,232 680,218 Z" fill="white" opacity="0.6" />
+        <!-- Snow right streak -->
+        <path d="M790,215 C800,230 805,250 802,270 C785,250 772,232 760,218 Z" fill="white" opacity="0.6" />
+
+        <!-- Lake reflection -->
+        <ellipse cx="720" cy="560" rx="280" ry="30" fill="rgba(46,90,140,0.3)" />
+        <path d="M460,600 L720,470 L980,600 Z" fill="rgba(46,90,140,0.15)" />
+        <!-- Fuji reflection in lake (flipped, faint) -->
+        <path d="M560,570 L720,480 L880,570 Z" fill="rgba(255,255,255,0.04)" />
+
+        <!-- Foreground hills -->
+        <path d="M0,600 L0,500 Q200,420 400,480 Q600,540 720,500 Q840,460 1040,480 Q1240,500 1440,460 L1440,600 Z"
+          fill="#0f1e35" />
+        <!-- Tree line left -->
+        <path d="M0,600 L0,510 Q100,480 200,490 Q300,500 400,485 L400,600 Z" fill="#0a1525" />
+        <!-- Tree line right -->
+        <path d="M1040,600 L1040,485 Q1140,500 1240,490 Q1340,480 1440,510 L1440,600 Z" fill="#0a1525" />
+
+        <!-- Torii gate silhouette -->
+        <g fill="#0d1525" opacity="0.9">
+          <rect x="695" y="460" width="6" height="60" />
+          <rect x="739" y="460" width="6" height="60" />
+          <rect x="685" y="452" width="70" height="7" rx="1" />
+          <rect x="690" y="465" width="60" height="5" rx="1" />
+          <path d="M685,452 L680,445 L760,445 L755,452 Z" fill="#0d1525" />
+        </g>
+      </svg>
+    </div>
+
+    <!-- Mist -->
+    <div class="mist"></div>
+    <div class="mist mist2"></div>
+
+    <!-- Sakura petals -->
+    <div id="petals"></div>
+
+    <!-- Hero content -->
+    <div class="hero-content">
+      <p class="hero-jp">ポートフォリオ · 2026/p>
+      <h1 class="hero-name">NIBOL</h1>
+      <p class="hero-tagline">TKJ · Angkatan 34 · RGi · Bogor, 28 Agustus 2007</p>
+      <p class="hero-quote">"Jadilah sigma di dunia yang gyatt."</p>
+    </div>
+
+    <div class="scroll-hint">
+      <span>SCROLL</span>
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+
+  <!-- ── ABOUT SECTION ── -->
+  <section id="about">
+    <div class="reveal">
+      <p class="section-label">自己紹介 · Tentang Saya</p>
+      <h2 class="section-title">Who Am I?</h2>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-card reveal">
+        <div class="info-row">
+          <span class="info-label">Nama Lengkap</span>
+          <span class="info-value">Nibol</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">TTL</span>
+          <span class="info-value">Bogor, 28 Agustus 2007</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Tinggi Badan</span>
+          <span class="info-value">160 cm</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Sekolah</span>
+          <span class="info-value">RGi</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Jurusan</span>
+          <span class="info-value">Teknik Komputer & Jaringan</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Angkatan</span>
+          <span class="info-value">34</span>
+        </div>
+        <div class="tags">
+          <span class="tag">🎮 Gamer</span>
+          <span class="tag">⛩️ Otaku</span>
+          <span class="tag">📡 TKJ</span>
+          <span class="tag">🕌 Soleh</span>
+          <span class="tag">😎 Sigma</span>
+        </div>
+      </div>
+
+      <div class="reveal" style="display:flex;flex-direction:column;gap:1.5rem;">
+        <div class="about-card">
+          <p class="bio-text">
+            Saya adalah <span class="bio-highlight">siswa TKJ Angkatan 34 di RGi</span> yang dikenal
+            sebagai salah satu siswa <span class="bio-highlight">paling pintar dan soleh</span> di angkatannya.
+            Di balik layar, saya adalah seorang <span class="bio-highlight">gamer</span> yang tak kenal lelah
+            dan sedikit <span class="bio-highlight">otaku</span> — dua dunia yang berpadu dalam harmoni sempurna
+            seperti langit dan Gunung Fuji.
+          </p>
+          <p class="bio-text">
+            Dengan mindset <span class="bio-highlight">sigma</span> yang kokoh dan vibe
+            <span class="bio-highlight">chill</span> yang tenang, saya menjalani setiap hari
+            dengan penuh semangat — belajar networking, debug code, dan sesekali nonton anime sampai subuh.
+          </p>
+        </div>
+
+        <div class="about-card" style="padding: 2rem 2.5rem;">
+          <p
+            style="font-family:'Shippori Mincho',serif;font-size:1rem;line-height:1.8;color:rgba(245,240,239,0.6);font-style:italic;text-align:center;">
+            "I'm Just a Chill Guy"
+          </p>
+          <div
+            style="margin-top:1rem;width:40px;height:1px;background:linear-gradient(90deg,var(--fuji-pink),transparent);margin-left:auto;margin-right:auto;">
+          </div>
+          <p
+            style="text-align:center;margin-top:0.8rem;font-size:0.65rem;letter-spacing:0.3em;color:rgba(184,212,232,0.35);">
+            — NIBOL</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── EXPLORE / BUTTONS ── -->
+  <section id="explore">
+    <div class="reveal" style="text-align:center;">
+      <p class="section-label">探索 · Jelajahi</p>
+      <h2 class="section-title" style="text-align:center;">My World</h2>
+      <p
+        style="font-size:0.85rem;color:rgba(245,240,239,0.4);letter-spacing:0.1em;margin-top:-2rem;margin-bottom:1rem;">
+        Pilih dunia yang ingin kamu jelajahi
+      </p>
+    </div>
+
+    <div class="btn-grid reveal">
+      <!-- Game -->
+      <a href="game.html" class="nav-btn">
+        <div class="btn-inner">
+          <span class="btn-baru">New</span>
+          <span class="btn-icon">🎮</span>
+          <span class="btn-label">Game</span>
+          <span class="btn-sublabel">Gaming Life</span>
+        </div>
+      </a>
+
+      <!-- Anime -->
+      <a href="#" class="nav-btn" onclick="return false;">
+        <div class="btn-inner">
+          <span class="btn-coming">Soon</span>
+          <span class="btn-icon">⛩️</span>
+          <span class="btn-label">Anime</span>
+          <span class="btn-sublabel">Watchlist</span>
+        </div>
+      </a>
+
+      <!-- Student -->
+      <a href="#" class="nav-btn" onclick="return false;">
+        <div class="btn-inner">
+          <span class="btn-coming">Soon</span>
+          <span class="btn-icon">📡</span>
+          <span class="btn-label">Student</span>
+          <span class="btn-sublabel">TKJ Journey</span>
+        </div>
+      </a>
+
+      <!-- Gallery -->
+      <a href="#" class="nav-btn" onclick="return false;">
+        <div class="btn-inner">
+          <span class="btn-coming">Soon</span>
+          <span class="btn-icon">🗻</span>
+          <span class="btn-label">Galeri</span>
+          <span class="btn-sublabel">Moments</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── BIG QUOTE ── -->
+  <div class="quote-section reveal">
+    <p class="big-quote">
+      Jadilah <em>sigma</em> di dunia yang gyatt.<br>
+      Tetap <em>chill</em>, tetap <em>soleh</em>, tetap <em>sigma</em>.
+    </p>
+  </div>
+
+  <!-- ── SOCIAL MEDIA ── -->
+  <section id="social" class="reveal">
+    <div style="text-align:center;">
+      <p class="section-label">繋がる · Connect</p>
+      <h2 class="section-title" style="text-align:center;">Find Me</h2>
+    </div>
+
+    <div class="social-links">
+      <!-- Instagram -->
+      <a href="https://instagram.com/gbrnmewing" target="_blank" rel="noopener" class="social-btn" id="social-ig"
+        aria-label="Instagram">
+        <div class="social-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" />
+            <circle cx="12" cy="12" r="5" />
+            <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none" />
+          </svg>
+        </div>
+        <span class="social-label">Instagram</span>
+        <span class="social-handle">@gbrnmewing</span>
+      </a>
+
+      <!-- WhatsApp -->
+      <a href="https://wa.me/083146564122" target="_blank" rel="noopener" class="social-btn" id="social-wa" aria-label="WhatsApp">
+        <div class="social-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path
+              d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+          </svg>
+        </div>
+        <span class="social-label">WhatsApp</span>
+        <span class="social-handle">Chat Me</span>
+      </a>
+
+      <!-- TikTok -->
+      <a href="https://tiktok.com/" target="_blank" rel="noopener" class="social-btn" id="social-tiktok"
+        aria-label="TikTok">
+        <div class="social-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V9.41a8.16 8.16 0 0 0 4.76 1.53v-3.5a4.84 4.84 0 0 1-1-.75z" />
+          </svg>
+        </div>
+        <span class="social-label">TikTok</span>
+        <span class="social-handle">@nibol</span>
+      </a>
+
+      <!-- Facebook -->
+      <a href="https://facebook.com/" target="_blank" rel="noopener" class="social-btn" id="social-fb"
+        aria-label="Facebook">
+        <div class="social-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+          </svg>
+        </div>
+        <span class="social-label">Facebook</span>
+        <span class="social-handle">Nibol</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <!-- Di footer atau About section -->
+<p class="ai-note">
+  💡 <em>Proyek ini dibangun dengan bantuan AI (Claude, ChatGPT, Copilot) 
+  sebagai pair programming partner. Semua keputusan arsitektur, 
+  desain, dan custom logic dirancang dan dipahami secara manual.</em>
+</p>
+    <p>© 2026 <span>NIBOL</span> · TKJ Angkatan 34 · RGi · Bogor</p>
+    <p style="margin-top:0.5rem;font-size:0.6rem;letter-spacing:0.2em;color:rgba(245,240,239,0.15);">
+      富士山の麓から · Dari kaki Gunung Fuji
+    </p>
+  </footer>
+
+  <script src="js/profil.js"></script>
+</body>
+
+</html>

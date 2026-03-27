@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NIBOL · 游戯の記録 · Game Archive</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&family=Noto+Serif+JP:wght@300;400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Shippori+Mincho:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/game.css" />
+  <link rel="shortcut icon" href="image/logo.png" type="image/x-icon">
+</head>
+
+<body>
+
+  <!-- ══ LAYER BACKGROUND ══ -->
+  <div class="bg-shoji"></div> <!-- shoji screen texture -->
+  <div class="bg-mist"></div> <!-- night mist -->
+  <div class="bg-wisteria"></div> <!-- wisteria pattern -->
+  <canvas id="petals"></canvas> <!-- floating petals -->
+
+  <!-- ══ CURSOR ══ -->
+  <div class="cursor-blade" id="cursorBlade"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- ══ HEADER ══ -->
+  <header id="mainHeader">
+    <!-- Haori collar ornament kiri & kanan -->
+    <div class="haori-left"></div>
+    <div class="haori-right"></div>
+
+    <div class="header-inner">
+      <!-- Kiri: tombol back -->
+      <div class="header-left">
+        <a href="profil.html" class="back-btn">
+          <span class="back-icon">⟵</span>
+          <span>戻る</span>
+        </a>
+      </div>
+
+      <!-- Tengah: judul -->
+      <div class="header-center">
+        <div class="header-kamon">✦</div>
+        <div class="header-jp-sub">鬼殺隊ゲーム記録</div>
+        <h1 class="header-title">GAME <em>LIST</em></h1>
+        <div class="header-en-sub">NIBOL'S GAMING ARCHIVE · 大正時代</div>
+      </div>
+
+      <!-- Kanan: jam -->
+      <div class="header-right">
+        <div class="clock-label">現在時刻</div>
+        <div class="hud-clock" id="clock">00:00:00</div>
+        <div class="hud-date" id="date">--/--/----</div>
+      </div>
+    </div>
+
+    <!-- Garis dekorasi bawah header -->
+    <div class="header-ornament">
+      <div class="orn-line"></div>
+      <div class="orn-kiku">⊕</div>
+      <div class="orn-line"></div>
+    </div>
+  </header>
+
+  <!-- ══ STATS BAR ══ -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-label">総ゲーム数</span>
+      <span class="stat-value" id="totalGames">06</span>
+    </div>
+    <div class="stat-divider">◈</div>
+    <div class="stat-item">
+      <span class="stat-label">平均進捗</span>
+      <span class="stat-value" id="avgProgress">―</span>
+    </div>
+    <div class="stat-divider">◈</div>
+    <div class="stat-item">
+      <span class="stat-label">状態</span>
+      <span class="stat-value active-status">活動中</span>
+    </div>
+    <div class="stat-divider">◈</div>
+    <div class="stat-item">
+      <span class="stat-label">剣士</span>
+      <span class="stat-value">NIBOL</span>
+    </div>
+    <div class="stat-divider">◈</div>
+    <div class="stat-item">
+      <span class="stat-label">所属</span>
+      <span class="stat-value">TKJ · RGi · 34</span>
+    </div>
+  </div>
+
+  <!-- ══ MAIN CONTENT ══ -->
+  <main>
+
+    <!-- ╔══════════════════════════╗ -->
+    <!-- ║   GENSHIN IMPACT        ║ -->
+    <!-- ╚══════════════════════════╝ -->
+    <article class="game-card" data-game="genshin">
+      <div class="card-glow glow-genshin"></div>
+
+      <!-- Corner kimono motif -->
+      <div class="kamon tl">✦</div>
+      <div class="kamon tr">✦</div>
+      <div class="kamon bl">✦</div>
+      <div class="kamon br">✦</div>
+
+      <!-- Vertical stripe kiri (motif haori) -->
+      <div class="haori-stripe"></div>
+
+      <div class="card-header">
+
+        <!-- Foto / ukiyo-e frame -->
+        <div class="ukiyo-frame" data-label="元素旅人 · Genshin">
+          <div class="frame-top-bar"></div>
+          <div class="photo-inner">
+            <div class="photo-placeholder" style="display:none">
+              <div class="photo-mon">源</div>
+              <div class="photo-hint">画像をここに</div>
+              <div class="photo-hint2">Click to zoom</div>
+            </div>
+            <img id="genshin-img" class="game-photo" src="image/gi.jpg" alt="" style="display:block" />
+          </div>
+          <div class="frame-bot-bar"></div>
+        </div>
+
+        <!-- Info -->
+        <div class="card-info">
+          <div class="game-tag">GACHA · RPG · OPEN WORLD</div>
+          <h2 class="game-title">Genshin Impact</h2>
+          <div class="game-dev">miHoYo · HoYoverse
+            <span class="uid-badge">UID 889627480</span>
+          </div>
+          <div class="game-username">AlterNibol</div>
+          <div class="game-platform">
+            <span class="p-badge">PC</span>
+            <span class="p-badge">MOBILE</span>
+            <span class="p-badge">PS</span>
+          </div>
+          <div class="status-row">
+            <span class="status-flame">🔥</span>
+            <span class="status-text">Currently Playing</span>
+            <span class="status-quote">"No Game No Life"</span>
+          </div>
+        </div>
+
+        <!-- Rank box -->
+        <div class="rank-box">
+          <div class="rank-kanji">冒</div>
+          <div class="rank-label-top">ADVENTURE</div>
+          <div class="rank-num">57</div>
+          <div class="rank-denom">/60</div>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-section">
+        <div class="prog-row">
+          <div class="prog-header">
+            <span class="prog-label">Adventure Rank</span>
+            <span class="prog-val">57 / 60</span>
+          </div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#9b7ec8;--p:95%"></div>
+          </div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header">
+            <span class="prog-label">Spiral Abyss</span>
+            <span class="prog-val">Floor 11-3 · ⭐27</span>
+          </div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#c891e8;--p:56%"></div>
+          </div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header">
+            <span class="prog-label">Total Achievement</span>
+            <span class="prog-val">685</span>
+          </div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#D4AF37;--p:69%"></div>
+          </div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header">
+            <span class="prog-label">Imaginarium Theater</span>
+            <span class="prog-val danger">Belum Ditantang</span>
+          </div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#9C2A2A;--p:0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer stats -->
+      <div class="card-footer">
+        <div class="foot-stat"><span class="fl">World Level</span><span class="fv">8</span></div>
+        <div class="foot-stat"><span class="fl">Friendship Max</span><span class="fv">6</span></div>
+        <div class="foot-stat"><span class="fl">Waifu</span><span class="fv blue-val">Furina</span></div>
+        <div class="foot-stat"><span class="fl">Server</span><span class="fv">ASIA</span></div>
+      </div>
+    </article>
+
+    <!-- ╔══════════════════════════╗ -->
+    <!-- ║   HONKAI: STAR RAIL     ║ -->
+    <!-- ╚══════════════════════════╝ -->
+    <article class="game-card" data-game="hsr">
+      <div class="card-glow glow-hsr"></div>
+      <div class="kamon tl">✦</div>
+      <div class="kamon tr">✦</div>
+      <div class="kamon bl">✦</div>
+      <div class="kamon br">✦</div>
+      <div class="haori-stripe"></div>
+
+      <div class="card-header">
+        <div class="ukiyo-frame" data-label="星穹鉄道 · Star Rail">
+          <div class="frame-top-bar"></div>
+          <div class="photo-inner">
+            <div class="photo-placeholder" style="display:none">
+              <div class="photo-mon">星</div>
+              <div class="photo-hint">画像をここに</div>
+              <div class="photo-hint2">Click to zoom</div>
+            </div>
+            <img id="hsr-img" class="game-photo" src="image/hsr.png" alt="" style="display:block" />
+          </div>
+          <div class="frame-bot-bar"></div>
+        </div>
+
+        <div class="card-info">
+          <div class="game-tag">GACHA · TURN-BASED · RPG</div>
+          <h2 class="game-title">Honkai: Star Rail</h2>
+          <div class="game-dev">miHoYo · HoYoverse
+            <span class="uid-badge">UID 826645012</span>
+          </div>
+          <div class="game-username">NibolaTesla</div>
+          <div class="game-platform">
+            <span class="p-badge">PC</span>
+            <span class="p-badge">MOBILE</span>
+            <span class="p-badge">PS</span>
+            <span class="p-badge gold-badge">Ξ03 · ♡A5 · △X5</span>
+          </div>
+          <div class="status-row">
+            <span class="status-flame">✦</span>
+            <span class="status-text">Currently Playing</span>
+            <span class="status-quote">"belum jadi raja iblis"</span>
+          </div>
+          <div
+            style="margin-top:0.4rem;font-family:var(--f-serif);font-size:0.6rem;color:var(--text-dim);letter-spacing:0.05em;">
+            ✦ Support: Aventurine · Firefly · Anaxa (Lv.80)
+          </div>
+        </div>
+
+        <div class="rank-box">
+          <div class="rank-kanji">旅</div>
+          <div class="rank-label-top">TRAILBLAZE</div>
+          <div class="rank-num">70</div>
+          <div class="rank-denom">/70</div>
+          <div class="rank-note">EQ · Lv.6</div>
+        </div>
+      </div>
+
+      <div class="progress-section">
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Trailblaze Level</span><span class="prog-val">70 / 70 ✦
+              MAX</span></div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#D4AF37;--p:100%"></div>
+          </div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Equilibrium Level</span><span class="prog-val">6 / 6 ✦
+              MAX</span></div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#a0c8ff;--p:100%"></div>
+          </div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Pure Fiction</span><span class="prog-val">Novel Tanpa Kata 3
+              ✓</span></div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#9b7ec8;--p:85%"></div>
+          </div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Latest 5★ Pull</span><span class="prog-val">Seele ·
+              Sparkle</span></div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#c8a4d4;--p:78%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="foot-stat"><span class="fl">Trailblaze Lv</span><span class="fv gold-val">70</span></div>
+        <div class="foot-stat"><span class="fl">Equilibrium</span><span class="fv gold-val">6</span></div>
+        <div class="foot-stat"><span class="fl">Waifu</span><span class="fv green-val">Fire Fly(hotaru)</span></div>
+        <div class="foot-stat"><span class="fl">Lahir</span><span class="fv">28/8</span></div>
+      </div>
+    </article>
+
+    <!-- ╔══════════════════════════╗ -->
+    <!-- ║   ZENLESS ZONE ZERO     ║ -->
+    <!-- ╚══════════════════════════╝ -->
+    <article class="game-card" data-game="zzz">
+      <div class="card-glow glow-zzz"></div>
+      <div class="kamon tl">✦</div>
+      <div class="kamon tr">✦</div>
+      <div class="kamon bl">✦</div>
+      <div class="kamon br">✦</div>
+      <div class="haori-stripe"></div>
+
+      <div class="card-header">
+        <div class="ukiyo-frame" data-label="絶区零号 · ZZZ">
+          <div class="frame-top-bar"></div>
+          <div class="photo-inner">
+            <div class="photo-placeholder" style="display:none">
+              <div class="photo-mon">零</div>
+              <div class="photo-hint">画像をここに</div>
+              <div class="photo-hint2">Click to zoom</div>
+            </div>
+            <img id="zzz-img" class="game-photo" src="image/zzz.png" alt="" style="display:block" />
+          </div>
+          <div class="frame-bot-bar"></div>
+        </div>
+
+        <div class="card-info">
+          <div class="game-tag">GACHA · ACTION · HACK & SLASH</div>
+          <h2 class="game-title">Zenless Zone Zero</h2>
+          <div class="game-dev">miHoYo · HoYoverse
+            <span class="uid-badge">UID 1306411744</span>
+          </div>
+          <div class="game-username">Belle.</div>
+          <div class="game-platform">
+            <span class="p-badge">PC</span>
+            <span class="p-badge">MOBILE</span>
+            <span class="p-badge">PS</span>
+          </div>
+          <div class="status-row">
+            <span class="status-flame">🔥</span>
+            <span class="status-text">Currently Playing</span>
+            <span class="status-quote">"ampar ampar sigma"</span>
+          </div>
+          <div
+            style="margin-top:0.4rem;font-family:var(--f-serif);font-size:0.62rem;color:var(--gold-dim);font-style:italic;letter-spacing:0.08em;">
+            ✦ Got My Senior to Back Me Up
+          </div>
+        </div>
+
+        <div class="rank-box">
+          <div class="rank-kanji">絆</div>
+          <div class="rank-label-top">INTER-KNOT</div>
+          <div class="rank-num">58</div>
+          <div class="rank-denom">/70</div>
+          <div class="rank-note">Shiyu S-Rank</div>
+        </div>
+      </div>
+
+      <div class="progress-section">
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Inter-Knot Level</span><span class="prog-val">58 / 70</span>
+          </div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#D4AF37;--p:83%"></div>
+          </div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Shiyu Defense</span><span class="prog-val">S-Rank</span>
+          </div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#9b7ec8;--p:80%"></div>
+          </div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Agent Collection</span><span class="prog-val">8 / 28</span>
+          </div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#c8a4d4;--p:28%"></div>
+          </div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Commission Rank</span><span class="prog-val">S-Rank</span>
+          </div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#9C2A2A;--p:85%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="foot-stat"><span class="fl">Agents</span><span class="fv">8</span></div>
+        <div class="foot-stat"><span class="fl">First Love</span><span class="fv pink-val">Belle</span></div>
+        <div class="foot-stat"><span class="fl">Waifu</span><span class="fv gold-val">jufufu</span></div>
+        <div class="foot-stat"><span class="fl">Server</span><span class="fv">ASIA</span></div>
+      </div>
+    </article>
+
+    <!-- ╔══════════════════════════╗ -->
+    <!-- ║   MOBILE LEGENDS        ║ -->
+    <!-- ╚══════════════════════════╝ -->
+    <article class="game-card" data-game="mlbb">
+      <div class="card-glow glow-mlbb"></div>
+      <div class="kamon tl">✦</div>
+      <div class="kamon tr">✦</div>
+      <div class="kamon bl">✦</div>
+      <div class="kamon br">✦</div>
+      <div class="haori-stripe"></div>
+
+      <div class="card-header">
+        <div class="ukiyo-frame" data-label="伝説の戦場 · MLBB">
+          <div class="frame-top-bar"></div>
+          <div class="photo-inner">
+            <div class="photo-placeholder" style="display:none">
+              <div class="photo-mon">伝</div>
+              <div class="photo-hint">画像をここに</div>
+              <div class="photo-hint2">Click to zoom</div>
+            </div>
+            <img id="mlbb-img" class="game-photo" src="image/mlbb.jpg" alt="" style="display:block" />
+          </div>
+          <div class="frame-bot-bar"></div>
+        </div>
+
+        <div class="card-info">
+          <div class="game-tag">MOBA · COMPETITIVE · TEAM</div>
+          <h2 class="game-title">Mobile Legends: Bang Bang</h2>
+          <div class="game-dev">Moonton · ByteDance
+            <span class="uid-badge">ID: 599702456 (8387)</span>
+          </div>
+          <div class="game-username">Bahlil raja ethanol</div>
+          <div class="game-platform">
+            <span class="p-badge">MOBILE</span>
+            <span class="p-badge gold-badge">LVL 59</span>
+          </div>
+          <div class="status-row">
+            <span class="status-flame">⚔️</span>
+            <span class="status-text">Ranked Active</span>
+            <span class="status-quote">⭐ Mythical Glory · 🏆 Juara MCL</span>
+          </div>
+        </div>
+
+        <div class="rank-box">
+          <div class="rank-kanji">神</div>
+          <div class="rank-label-top">MYTHIC</div>
+          <div class="rank-num" style="font-size:1.6rem">MYT</div>
+          <div class="rank-denom">IV</div>
+          <div class="rank-note">TOP ⭐64</div>
+        </div>
+      </div>
+
+      <div class="progress-section">
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Ranked Season Progress</span><span class="prog-val">Mythic
+              IV → Glory</span></div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#D4AF37;--p:80%"></div>
+          </div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Win Rate</span><span class="prog-val"
+              id="mlbb-wr">67%</span></div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#6aaa6a;--p:67%"></div>
+          </div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Total Matches</span><span class="prog-val">4,657</span>
+          </div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#9b7ec8;--p:88%"></div>
+          </div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Highest Rank</span><span class="prog-val">Mythical Glory
+              ⭐64</span></div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#c8a4d4;--p:95%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="foot-stat"><span class="fl">Matches</span><span class="fv">4657</span></div>
+        <div class="foot-stat"><span class="fl">Like</span><span class="fv pink-val">1521</span></div>
+        <div class="foot-stat"><span class="fl">Win Rate</span><span class="fv gold-val">67%</span></div>
+        <div class="foot-stat"><span class="fl">Role</span><span class="fv small-val">ALL ROLE</span></div>
+      </div>
+    </article>
+
+    <!-- ╔══════════════════════════╗ -->
+    <!-- ║   HONOR OF KINGS        ║ -->
+    <!-- ╚══════════════════════════╝ -->
+    <article class="game-card" data-game="hok">
+      <div class="card-glow glow-hok"></div>
+      <div class="kamon tl">✦</div>
+      <div class="kamon tr">✦</div>
+      <div class="kamon bl">✦</div>
+      <div class="kamon br">✦</div>
+      <div class="haori-stripe"></div>
+
+      <div class="card-header">
+        <div class="ukiyo-frame" data-label="王者栄耀 · Honor">
+          <div class="frame-top-bar"></div>
+          <div class="photo-inner">
+            <div class="photo-placeholder" style="display:none">
+              <div class="photo-mon">王</div>
+              <div class="photo-hint">画像をここに</div>
+              <div class="photo-hint2">Click to zoom</div>
+            </div>
+            <img id="hok-img" class="game-photo" src="image/hok.jpg" alt="" style="display:block" />
+          </div>
+          <div class="frame-bot-bar"></div>
+        </div>
+
+        <div class="card-info">
+          <div class="game-tag">MOBA · COMPETITIVE · TEAM</div>
+          <h2 class="game-title">Honor of Kings</h2>
+          <div class="game-dev">TiMi Studio · Level Infinite
+            <span class="uid-badge">ngawi</span>
+          </div>
+          <div class="game-username">mibomboo</div>
+          <div class="game-platform">
+            <span class="p-badge">MOBILE</span>
+            <span class="p-badge">PC</span>
+            <span class="p-badge cyan-badge">SOLO CARRY</span>
+          </div>
+          <div class="status-row">
+            <span class="status-flame">⚔️</span>
+            <span class="status-text">Ranked Active</span>
+            <span class="status-quote">🌲 Jungling Tier 15</span>
+          </div>
+        </div>
+
+        <div class="rank-box">
+          <div class="rank-kanji">将</div>
+          <div class="rank-label-top">GRANDMASTER</div>
+          <div class="rank-num" style="font-size:1.6rem">GM</div>
+          <div class="rank-denom">20</div>
+          <div class="rank-note">PEAK ~3K</div>
+        </div>
+      </div>
+
+      <div class="progress-section">
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Ranked Season Progress</span><span class="prog-val">GM 20 →
+              Peak ~3000</span></div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#9b7ec8;--p:82%"></div>
+          </div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Win Rate</span><span class="prog-val">63%</span></div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#6aaa6a;--p:63%"></div>
+          </div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Hero Collection</span><span class="prog-val">174
+              Heroes</span></div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#c8a4d4;--p:87%"></div>
+          </div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Grandmaster Seal Tier 4</span><span class="prog-val">Hero's
+              Gorge 1664</span></div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#D4AF37;--p:75%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="foot-stat"><span class="fl">Matches</span><span class="fv">1691</span></div>
+        <div class="foot-stat"><span class="fl">Hari Main</span><span class="fv">646</span></div>
+        <div class="foot-stat"><span class="fl">Skin</span><span class="fv gold-val">174</span></div>
+        <div class="foot-stat"><span class="fl">Like</span><span class="fv pink-val">1584</span></div>
+      </div>
+    </article>
+
+    <!-- ╔══════════════════════════╗ -->
+    <!-- ║   WUTHERING WAVE        ║ -->
+    <!-- ╚══════════════════════════╝ -->
+    <article class="game-card" data-game="wuwa">
+      <div class="card-glow glow-wuwa"></div>
+      <div class="kamon tl">✦</div>
+      <div class="kamon tr">✦</div>
+      <div class="kamon bl">✦</div>
+      <div class="kamon br">✦</div>
+      <div class="haori-stripe"></div>
+
+      <div class="card-header">
+        <div class="ukiyo-frame" data-label="嵐風波濤 · Wuthering Wave">
+          <div class="frame-top-bar"></div>
+          <div class="photo-inner">
+            <div class="photo-placeholder" style="display:none">
+              <div class="photo-mon">波</div>
+              <div class="photo-hint">画像をここに</div>
+              <div class="photo-hint2">Click Image</div>
+            </div>
+            <img id="wuwa-img" class="game-photo" src="image/wuwa.png" alt="Wuthering Wave" style="display:block" />
+          </div>
+          <div class="frame-bot-bar"></div>
+        </div>
+
+        <div class="card-info">
+          <div class="game-tag">ACTION · RPG · GACHA</div>
+          <h2 class="game-title">Wuthering Wave</h2>
+          <div class="game-dev">Archosaur Games
+            <span class="uid-badge">UID 900450449</span>
+          </div>
+          <div class="game-username">JefriNibol</div>
+          <div class="game-platform">
+            <span class="p-badge">PC</span>
+            <span class="p-badge">MOBILE</span>
+          </div>
+          <div class="status-row">
+            <span class="status-flame">🌊</span>
+            <span class="status-text">Currently Playing</span>
+            <span class="status-quote">"Sail the storm and prevail"</span>
+          </div>
+        </div>
+
+        <div class="rank-box">
+          <div class="rank-kanji">潮</div>
+          <div class="rank-label-top">CATACLYSM</div>
+          <div class="rank-num">45</div>
+          <div class="rank-denom">/70</div>
+        </div>
+      </div>
+
+      <div class="progress-section">
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Storm Level</span><span class="prog-val">45 / 70</span>
+          </div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#5abacc;--p:65%"></div>
+          </div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Wardens Rescued</span><span class="prog-val">130 /
+              200</span></div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#9b7ec8;--p:65%"></div>
+          </div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Fleet Power</span><span class="prog-val">32,860</span></div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#D4AF37;--p:52%"></div>
+          </div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Voyage Mastery</span><span class="prog-val">S-Rank</span>
+          </div>
+          <div class="prog-track">
+            <div class="prog-fill" style="--c:#6aaa6a;--p:80%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="foot-stat"><span class="fl">Battles</span><span class="fv">2371</span></div>
+        <div class="foot-stat"><span class="fl">Seals</span><span class="fv">82</span></div>
+        <div class="foot-stat"><span class="fl">Rewards</span><span class="fv">502</span></div>
+        <div class="foot-stat"><span class="fl">Waifu</span><span class="fv pink-val">Phoebe</span></div>
+      </div>
+    </article>
+
+  </main><!-- /main -->
+
+  <!-- ══ BOTTOM HUD ══ -->
+  <div class="bottom-hud">
+    <div class="hud-left">
+      <div class="hud-label">全体進捗 · Overall Level</div>
+      <div class="hud-track-wrap">
+        <div class="hud-track-inner" id="overallBar" style="width:0%"></div>
+      </div>
+    </div>
+    <div class="hud-pct" id="overallPct">0%</div>
+    <div class="hud-tag">NIBOL · TKJ Angkatan 34 · RGi · 大正時代</div>
+  </div>
+
+  <script src="js/game.js"></script>
+</body>
+
+</html>
