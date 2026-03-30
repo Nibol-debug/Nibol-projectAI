@@ -79,3 +79,66 @@ document.addEventListener("keydown", function(event) {
     cekLogin();
   }
 });
+
+// =============================================
+// CUSTOM CURSOR RESPONSIVE
+// =============================================
+
+(function initCustomCursor() {
+  const cursor = document.getElementById('customCursor');
+  const ring = document.getElementById('customCursorRing');
+  const isTouch = window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(max-width: 768px)').matches;
+
+  if (!cursor || !ring || isTouch) {
+    return;
+  }
+
+  document.body.classList.add('cursor-active');
+
+  let pointerX = window.innerWidth / 2;
+  let pointerY = window.innerHeight / 2;
+  let ringX = pointerX;
+  let ringY = pointerY;
+
+  cursor.style.left = pointerX + 'px';
+  cursor.style.top = pointerY + 'px';
+  ring.style.left = ringX + 'px';
+  ring.style.top = ringY + 'px';
+
+  document.addEventListener('mousemove', e => {
+    pointerX = e.clientX;
+    pointerY = e.clientY;
+    cursor.style.left = pointerX + 'px';
+    cursor.style.top = pointerY + 'px';
+  });
+
+  function animateRing() {
+    ringX += (pointerX - ringX) * 0.16;
+    ringY += (pointerY - ringY) * 0.16;
+    ring.style.left = ringX + 'px';
+    ring.style.top = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.addEventListener('mousedown', () => {
+    cursor.classList.add('cursor-click');
+    ring.classList.add('cursor-click');
+  });
+
+  document.addEventListener('mouseup', () => {
+    cursor.classList.remove('cursor-click');
+    ring.classList.remove('cursor-click');
+  });
+
+  document.querySelectorAll('button, a, input, .logo').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.classList.add('hovered');
+      ring.classList.add('hovered');
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.classList.remove('hovered');
+      ring.classList.remove('hovered');
+    });
+  });
+})();

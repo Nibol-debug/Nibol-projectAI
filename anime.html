@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anime List — 100 Terbaik</title>
+  <link rel="stylesheet" href="css/anime.css">
+  <link rel="shortcut icon" href="image/logov4.png" type="image/x-icon">
+</head>
+<body>
+
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span>✦</span>
+        <span>Koleksi Pilihan</span>
+        <span>✦</span>
+      </div>
+      <h1 class="hero-title">
+        <span class="word-1">TOP 100</span><br>
+        <span class="word-2">ANIME LIST MY FAV GUE</span>
+      </h1>
+      <p class="hero-sub">Koleksi anime terbaik yang wajib kamu tonton, dikurasi dengan cermat untuk para pecinta anime.</p>
+    </div>
+
+    <div class="scroll-indicator">
+      <span>SCROLL</span>
+      <div class="scroll-arrow"></div>
+    </div>
+
+    <!-- Wave SVG -->
+    <svg class="hero-wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" preserveAspectRatio="none">
+      <path fill="#07090f" d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80Z"/>
+    </svg>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+
+    <!-- STATS -->
+    <div class="stats-bar" id="statsBar"></div>
+
+    <!-- FILTER BOX -->
+    <div class="filter-box">
+      <div class="search-wrap">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" class="search-input" id="searchInput" placeholder="Cari anime favorit kamu...">
+      </div>
+
+      <div class="filter-section">
+        <span class="filter-label">🎭 Genre</span>
+        <div class="filter-tags" id="genreFilters"></div>
+      </div>
+
+      <div class="filter-row" style="margin-top:12px;">
+        <div class="filter-section" style="flex:1;">
+          <span class="filter-label">📌 Status</span>
+          <div class="filter-tags" id="statusFilters"></div>
+        </div>
+        <div class="filter-section">
+          <span class="filter-label">🔃 Urutkan</span>
+          <div class="filter-tags" id="sortFilters"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULT INFO -->
+    <p class="result-count" id="resultCount"></p>
+
+    <!-- ANIME LIST -->
+    <div class="anime-list" id="animeList"></div>
+  </div>
+
+  <script src="js/anime.js"></script>
+</body>
+</html>

@@ -37,6 +37,66 @@ body {
   position: relative;
 }
 
+@media (pointer: fine) {
+  body.cursor-active,
+  body.cursor-active * {
+    cursor: none !important;
+  }
+}
+
+.custom-cursor,
+.custom-cursor-ring {
+  position: fixed;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.18s ease, border-color 0.2s ease;
+}
+
+body.cursor-active .custom-cursor,
+body.cursor-active .custom-cursor-ring {
+  opacity: 1;
+}
+
+.custom-cursor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(232, 255, 71, 0.95);
+  box-shadow: 0 0 0 4px rgba(232, 255, 71, 0.14);
+}
+
+.custom-cursor-ring {
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(232, 255, 71, 0.9);
+  border-radius: 50%;
+}
+
+.custom-cursor.cursor-click {
+  transform: translate(-50%, -50%) scale(0.8);
+  background: rgba(232, 255, 71, 1);
+}
+
+.custom-cursor.hovered {
+  transform: translate(-50%, -50%) scale(1.6);
+}
+
+.custom-cursor-ring.hovered {
+  transform: translate(-50%, -50%) scale(1.4);
+  border-color: rgba(232, 255, 71, 1);
+}
+
+@media (pointer: coarse), (max-width: 768px) {
+  .custom-cursor,
+  .custom-cursor-ring {
+    display: none !important;
+  }
+}
+
 /* =============================================
    BACKGROUND SHAPES (dekorasi belakang)
    ============================================= */

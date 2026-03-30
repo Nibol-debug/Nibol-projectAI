@@ -72,7 +72,14 @@ body {
   color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
-  cursor: none;
+}
+
+/* Hide native cursor only when custom cursor is active (desktop) */
+@media (pointer: fine) {
+  body.cursor-active,
+  body.cursor-active * {
+    cursor: none !important;
+  }
 }
 
 /* ═══════════════════════════════════════
@@ -162,7 +169,8 @@ body::before {
   pointer-events: none;
   z-index: 9999;
   box-shadow: 0 0 12px var(--gold), 0 0 24px rgba(212, 175, 55, 0.3);
-  transition: transform 0.08s;
+  transition: transform 0.15s ease, width 0.2s ease, height 0.2s ease, opacity 0.15s ease;
+  opacity: 0;
 }
 
 .cursor-ring {
@@ -174,7 +182,32 @@ body::before {
   pointer-events: none;
   z-index: 9998;
   transform: translate(-50%, -50%);
-  transition: all 0.16s ease;
+  transition: all 0.2s ease, opacity 0.15s ease;
+  opacity: 0;
+}
+
+/* Show cursor when mouse is on page */
+body.cursor-active .cursor-blade,
+body.cursor-active .cursor-ring {
+  opacity: 1;
+}
+
+/* Click state */
+body.cursor-click .cursor-blade {
+  transform: translate(-50%, -50%) rotate(45deg) scale(0.6);
+}
+body.cursor-click .cursor-ring {
+  transform: translate(-50%, -50%) scale(0.75);
+  border-width: 2px;
+  border-color: rgba(212, 175, 55, 0.8);
+}
+
+/* Hide on touch devices and non-hover environments */
+@media (pointer: coarse), (hover: none), (max-width: 768px) {
+  .cursor-blade,
+  .cursor-ring {
+    display: none !important;
+  }
 }
 
 /* ═══════════════════════════════════════
@@ -1252,7 +1285,7 @@ main {
 
   .cursor-blade,
   .cursor-ring {
-    display: none;
+    display: none !important;
   }
 
   main {

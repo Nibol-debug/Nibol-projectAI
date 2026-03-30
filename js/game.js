@@ -6,29 +6,58 @@
 /* ═══ 1. CURSOR ═══ */
 const blade = document.getElementById('cursorBlade');
 const ring = document.getElementById('cursorRing');
-let mx = 0, my = 0, rx = 0, ry = 0;
+let mx = -100, my = -100, rx = -100, ry = -100;
 
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+// Skip cursor on touch / small screens or non-hover devices
+const isTouchDevice = window.matchMedia('(pointer: coarse)').matches
+  || window.matchMedia('(hover: none)').matches
+  || window.matchMedia('(max-width: 768px)').matches
+  || navigator.maxTouchPoints > 0;
 
-(function animCursor() {
-  if (blade) { blade.style.left = mx + 'px'; blade.style.top = my + 'px'; }
-  rx += (mx - rx) * 0.13;
-  ry += (my - ry) * 0.13;
-  if (ring) { ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; }
-  requestAnimationFrame(animCursor);
-})();
+const enableCustomCursor = !isTouchDevice && blade && ring;
 
-// Cursor hover effect
-document.querySelectorAll('a, button, .ukiyo-frame, [contenteditable], .foot-stat').forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    if (blade) blade.style.transform = 'translate(-50%,-50%) rotate(45deg) scale(2.2)';
-    if (ring) { ring.style.transform = 'translate(-50%,-50%) scale(1.6)'; ring.style.borderColor = 'rgba(212,175,55,0.7)'; }
+if (enableCustomCursor) {
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    blade.style.left = mx + 'px'; blade.style.top = my + 'px';
+    if (!document.body.classList.contains('cursor-active')) {
+      document.body.classList.add('cursor-active');
+    }
   });
-  el.addEventListener('mouseleave', () => {
-    if (blade) blade.style.transform = 'translate(-50%,-50%) rotate(45deg) scale(1)';
-    if (ring) { ring.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.borderColor = 'rgba(212,175,55,0.4)'; }
+
+  (function animCursor() {
+    rx += (mx - rx) * 0.13;
+    ry += (my - ry) * 0.13;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animCursor);
+  })();
+
+  // Visibility
+  document.addEventListener('mouseleave', () => document.body.classList.remove('cursor-active'));
+  document.addEventListener('mouseenter', () => document.body.classList.add('cursor-active'));
+
+  // Click state
+  document.addEventListener('mousedown', () => document.body.classList.add('cursor-click'));
+  document.addEventListener('mouseup', () => document.body.classList.remove('cursor-click'));
+
+  // Hover effects via delegation
+  document.addEventListener('mouseover', e => {
+    const el = e.target.closest('a, button, .ukiyo-frame, [contenteditable], .foot-stat, .game-card');
+    if (el) {
+      blade.style.transform = 'translate(-50%,-50%) rotate(45deg) scale(2.2)';
+      ring.style.transform = 'translate(-50%,-50%) scale(1.6)';
+      ring.style.borderColor = 'rgba(212,175,55,0.7)';
+    } else {
+      blade.style.transform = 'translate(-50%,-50%) rotate(45deg) scale(1)';
+      ring.style.transform = 'translate(-50%,-50%) scale(1)';
+      ring.style.borderColor = 'rgba(212,175,55,0.4)';
+    }
   });
-});
+} else {
+  if (blade) blade.style.display = 'none';
+  if (ring) ring.style.display = 'none';
+  document.body.classList.remove('cursor-active');
+}
 
 /* ═══ 2. CLOCK ═══ */
 function updateClock() {
