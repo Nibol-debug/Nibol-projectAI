@@ -2,18 +2,20 @@
   'use strict';
 
   const JIKAN = 'https://api.jikan.moe/v4';
-  const DELAY_MS = 370;
-  const RETRY_MS = 1800;
-  const MAX_RETRY = 3;
+  const DELAY_MS = 500;   // increased from 370 to reduce 429s
+  const RETRY_MS = 2500;  // increased retry wait
+  const MAX_RETRY = 4;    // one more retry
   const TOTAL = 100;
   const CACHE_KEY = 'myAnimeNibol_v3';
-  const CACHE_TTL = 24 * 60 * 60 * 1000;
+  const CACHE_TTL   = 7 * 24 * 60 * 60 * 1000;  // 7 days hard expiry
+  const CACHE_STALE = 1 * 60 * 60 * 1000;        // 1h — serve instantly, refresh in bg
   const translationCache = {};
 
-  // User's personal top picks
+  // ===== USER'S PERSONAL PICKS =====
+  // Ranks must be sequential 1..N without gaps, or gap slots fill from MAL top anime
   const MY_PICKS = [
     { rank: 1,  id: 52991 },
-    { rank: 2,  id: 11061, kurapika: true },
+    { rank: 2,  id: 11061 },
     { rank: 3,  id: 9253 },
     { rank: 4,  id: 28851 },
     { rank: 5,  id: 37521 },
@@ -24,14 +26,14 @@
     { rank: 10, id: 16498 },
     { rank: 11, id: 5680 },
     { rank: 12, id: 37991 },
-    { rank: 15, id: 41457 },
-    { rank: 16, id: 20583 },
-    { rank: 17, id: 31933 },
-    { rank: 18, q: 'Kubo-san wa Mob wo Yurusanai' },
-    { rank: 19, q: 'Kaoru Hana wa Rin to Saku' },
-    { rank: 20, id: 37105 },
-    { rank: 21, id: 30831 },
-    { rank: 22, id: 33255 },
+    { rank: 13, id: 41457 },
+    { rank: 14, id: 20583 },
+    { rank: 15, id: 31933 },
+    { rank: 16, q: 'Kubo-san wa Mob wo Yurusanai' },
+    { rank: 17, q: 'Kaoru Hana wa Rin to Saku' },
+    { rank: 18, id: 37105 },
+    { rank: 19, id: 30831 },
+    { rank: 20, id: 33255 },
   ];
 
   let animeList = [];
@@ -46,7 +48,12 @@
     for (let i = 0; i < MAX_RETRY; i++) {
       try {
         const res = await fetch(url);
-        if (res.status === 429) { await wait(RETRY_MS * (i + 1)); continue; }
+        if (res.status === 429) {
+          const backoff = RETRY_MS * (i + 1);
+          console.warn(`Rate limited, waiting ${backoff}ms...`);
+          await wait(backoff);
+          continue;
+        }
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
         await wait(DELAY_MS);
@@ -62,34 +69,44 @@
   function norm(a) {
     if (!a) return null;
     return {
-      malId: a.mal_id, title: a.title,
-      titleEn: a.title_english || a.title,
-      titleJp: a.title_japanese || '',
-      img: a.images?.jpg?.large_image_url || a.images?.jpg?.image_url || '',
-      score: a.score || 0, type: a.type || 'Unknown',
-      episodes: a.episodes || '?', status: a.status || '',
+      malId:    a.mal_id,
+      title:    a.title,
+      titleEn:  a.title_english || a.title,
+      titleJp:  a.title_japanese || '',
+      img:      a.images?.jpg?.large_image_url || a.images?.jpg?.image_url || '',
+      score:    a.score || 0,
+      type:     a.type || 'Unknown',
+      episodes: a.episodes || '?',
+      status:   a.status || '',
       synopsis: a.synopsis || 'No synopsis available.',
-      genres: (a.genres || []).map(g => g.name),
-      studios: (a.studios || []).map(s => s.name),
-      year: a.year || a.aired?.prop?.from?.year || '',
-      url: a.url || '', myRank: 0, isManga: false
+      genres:   (a.genres || []).map(g => g.name),
+      studios:  (a.studios || []).map(s => s.name),
+      year:     a.year || a.aired?.prop?.from?.year || '',
+      url:      a.url || '',
+      myRank:   0,
+      isManga:  false
     };
   }
 
   function normManga(m) {
     if (!m) return null;
     return {
-      malId: m.mal_id, title: m.title,
-      titleEn: m.title_english || m.title,
-      titleJp: m.title_japanese || '',
-      img: m.images?.jpg?.large_image_url || m.images?.jpg?.image_url || '',
-      score: m.score || 0, type: 'Manga',
-      episodes: m.chapters || '?', status: m.status || '',
+      malId:    m.mal_id,
+      title:    m.title,
+      titleEn:  m.title_english || m.title,
+      titleJp:  m.title_japanese || '',
+      img:      m.images?.jpg?.large_image_url || m.images?.jpg?.image_url || '',
+      score:    m.score || 0,
+      type:     'Manga',
+      episodes: m.chapters || '?',
+      status:   m.status || '',
       synopsis: m.synopsis || 'No synopsis available.',
-      genres: (m.genres || []).map(g => g.name),
-      studios: (m.authors || []).map(a => a.name),
-      year: m.published?.prop?.from?.year || '',
-      url: m.url || '', myRank: 0, isManga: true
+      genres:   (m.genres || []).map(g => g.name),
+      studios:  (m.authors || []).map(a => a.name),
+      year:     m.published?.prop?.from?.year || '',
+      url:      m.url || '',
+      myRank:   0,
+      isManga:  true
     };
   }
 
@@ -98,16 +115,15 @@
     const d = await apiFetch(`${JIKAN}/anime/${id}/full`);
     return d ? norm(d.data) : null;
   }
+
   async function searchAnime(q) {
     const d = await apiFetch(`${JIKAN}/anime?q=${encodeURIComponent(q)}&limit=1&sfw=true`);
     return d?.data?.[0] ? norm(d.data[0]) : null;
   }
+
   async function searchManga(q) {
     const d = await apiFetch(`${JIKAN}/manga?q=${encodeURIComponent(q)}&limit=1&sfw=true`);
     return d?.data?.[0] ? normManga(d.data[0]) : null;
-  }
-  function getKurapikaImg() {
-    return 'image/kurapika_emperor_time.png';
   }
 
   async function translateToId(text) {
@@ -115,7 +131,6 @@
     const key = text.substring(0, 80);
     if (translationCache[key]) return translationCache[key];
     try {
-      // Split into chunks of ~490 chars at sentence boundaries
       const chunks = [];
       let remaining = text.replace(/\[Written by MAL Rewrite\]/g, '').trim();
       while (remaining.length > 0) {
@@ -129,11 +144,15 @@
       }
       const translated = [];
       for (const chunk of chunks) {
-        const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(chunk)}&langpair=en|id`);
-        const data = await res.json();
-        if (data?.responseData?.translatedText && !data.responseData.translatedText.includes('QUERY LENGTH LIMIT')) {
-          translated.push(data.responseData.translatedText);
-        } else {
+        try {
+          const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(chunk)}&langpair=en|id`);
+          const data = await res.json();
+          if (data?.responseData?.translatedText && !data.responseData.translatedText.includes('QUERY LENGTH LIMIT')) {
+            translated.push(data.responseData.translatedText);
+          } else {
+            translated.push(chunk);
+          }
+        } catch {
           translated.push(chunk);
         }
         await wait(300);
@@ -144,6 +163,7 @@
     } catch (e) { console.warn('Translation failed:', e); }
     return text;
   }
+
   async function fetchTopPage(page) {
     const d = await apiFetch(`${JIKAN}/top/anime?page=${page}&limit=25&sfw=true`);
     return d?.data ? d.data.map(norm).filter(Boolean) : [];
@@ -153,10 +173,15 @@
   function getCache() {
     try {
       const r = localStorage.getItem(CACHE_KEY);
-      if (r) { const d = JSON.parse(r); if (Date.now() - d.ts < CACHE_TTL) return d.list; }
+      if (r) {
+        const d = JSON.parse(r);
+        const age = Date.now() - d.ts;
+        if (age < CACHE_TTL) return { list: d.list, stale: age > CACHE_STALE };
+      }
     } catch (e) {}
     return null;
   }
+
   function setCache(list) {
     try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), list })); } catch (e) {}
   }
@@ -164,19 +189,34 @@
   // ===== MAIN LOADER =====
   async function loadData() {
     const cached = getCache();
-    if (cached && cached.length >= 50) {
-      animeList = cached;
+    if (cached && cached.list.length >= 20) {
+      // Instantly render from cache
+      animeList = cached.list;
       displayList = [...animeList];
       hideLoading(); renderGrid(); updateStats();
+
+      // If stale, silently refresh in background
+      if (cached.stale) {
+        fetchAndRefresh();
+      }
       return;
     }
 
+    // No cache — show skeletons immediately, then fetch
+    hideLoading();
+    renderSkeletons(20);
+    await fetchAndRefresh();
+  }
+
+  async function fetchAndRefresh() {
     let steps = 0;
     const totalSteps = MY_PICKS.length + 6;
     const prog = () => {
       steps++;
-      const bar = document.getElementById('progressBar');
-      if (bar) bar.style.width = Math.round((steps / totalSteps) * 100) + '%';
+      // update skeleton progress indicators as picks come in
+      const skels = document.querySelectorAll('.skeleton-card');
+      const done = Math.round((steps / totalSteps) * skels.length);
+      skels.forEach((s, i) => { if (i < done) s.classList.add('skeleton-loaded'); });
     };
 
     const picked = {};
@@ -184,29 +224,37 @@
 
     for (const p of MY_PICKS) {
       let a = null;
-      if (p.manga) { a = await searchManga(p.q); }
-      else if (p.id) { a = await fetchById(p.id); }
-      else if (p.q) { a = await searchAnime(p.q); }
+      try {
+        if (p.manga)     { a = await searchManga(p.q); }
+        else if (p.id)   { a = await fetchById(p.id); }
+        else if (p.q)    { a = await searchAnime(p.q); }
+      } catch (e) {
+        console.warn(`Failed to fetch rank ${p.rank}:`, e);
+      }
       if (a) {
         a.myRank = p.rank;
         picked[p.rank] = a;
         pickedIds.add(a.malId);
-        if (p.kurapika) {
-          a.img = getKurapikaImg();
-        }
+
       }
       prog();
     }
 
     const topAll = [];
     for (let pg = 1; pg <= 6; pg++) {
-      const page = await fetchTopPage(pg);
-      topAll.push(...page);
+      try {
+        const page = await fetchTopPage(pg);
+        topAll.push(...page);
+      } catch (e) {
+        console.warn(`Failed to fetch top page ${pg}:`, e);
+      }
       prog();
     }
 
     const final = new Array(TOTAL).fill(null);
-    for (const [r, a] of Object.entries(picked)) final[parseInt(r) - 1] = a;
+    for (const [r, a] of Object.entries(picked)) {
+      final[parseInt(r) - 1] = a;
+    }
 
     const fill = topAll.filter(a => !pickedIds.has(a.malId));
     let fi = 0;
@@ -230,6 +278,23 @@
     if (el) el.style.display = 'none';
   }
 
+  function renderSkeletons(count) {
+    const g = document.getElementById('animeGrid');
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < count; i++) {
+      const s = document.createElement('div');
+      s.className = 'skeleton-card';
+      s.innerHTML = `
+        <div class="skeleton-img"></div>
+        <div class="skeleton-body">
+          <div class="skeleton-line skeleton-title"></div>
+          <div class="skeleton-line skeleton-meta"></div>
+        </div>`;
+      frag.appendChild(s);
+    }
+    g.appendChild(frag);
+  }
+
   // ===== RENDERING =====
   function createCard(a) {
     const card = document.createElement('div');
@@ -238,13 +303,13 @@
     card.dataset.type = a.type;
     card.dataset.rank = a.myRank;
 
-    let rc = 'rank-normal';
-    if (a.myRank === 1) rc = 'rank-1';
-    else if (a.myRank === 2) rc = 'rank-2';
-    else if (a.myRank === 3) rc = 'rank-3';
+    let rc = '';
+    if      (a.myRank === 1)  rc = 'rank-1';
+    else if (a.myRank === 2)  rc = 'rank-2';
+    else if (a.myRank === 3)  rc = 'rank-3';
     else if (a.myRank <= 10) rc = 'rank-top10';
 
-    const fallbackSvg = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='310' fill='%230d1f3c'%3E%3Crect width='220' height='310'/%3E%3Ctext x='110' y='155' text-anchor='middle' fill='%233da5d9' font-size='14'%3ENo Image%3C/text%3E%3C/svg%3E`;
+    const fallbackSvg = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='300' fill='%230d1f3c'%3E%3Crect width='200' height='300'/%3E%3Ctext x='100' y='150' text-anchor='middle' fill='%2300e5ff' font-size='13' font-family='sans-serif'%3ENo Image%3C/text%3E%3C/svg%3E`;
     const typeLabel = a.isManga ? 'Manga' : a.type;
 
     card.innerHTML = `
@@ -269,8 +334,7 @@
 
   function renderGrid() {
     const g = document.getElementById('animeGrid');
-    const cards = g.querySelectorAll('.anime-card, .no-results');
-    cards.forEach(c => c.remove());
+    g.querySelectorAll('.anime-card, .no-results, .skeleton-card').forEach(c => c.remove());
 
     if (displayList.length === 0) {
       g.innerHTML += `<div class="no-results">
@@ -288,7 +352,10 @@
 
   function updateStats() {
     const total = animeList.length;
-    const avg = total ? (animeList.reduce((s, a) => s + (a.score || 0), 0) / animeList.filter(a => a.score).length) : 0;
+    const scoredList = animeList.filter(a => a.score);
+    const avg = scoredList.length
+      ? scoredList.reduce((s, a) => s + a.score, 0) / scoredList.length
+      : 0;
     const eps = animeList.reduce((s, a) => s + (typeof a.episodes === 'number' ? a.episodes : 0), 0);
 
     animateNum('totalAnime', total, 0);
@@ -317,7 +384,7 @@
     const epLabel = a.isManga ? 'Chapter' : 'Episode';
 
     m.innerHTML = `
-      <button class="modal-close" id="modalClose" onclick="document.getElementById('modalOverlay').classList.remove('active')">✕</button>
+      <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('active')">✕</button>
       <div class="modal-hero">
         <img src="${a.img}" alt="${a.title}">
         <div class="modal-hero-overlay"></div>
@@ -335,16 +402,15 @@
           <div class="modal-stat"><span class="modal-stat-value">${a.year || '?'}</span><span class="modal-stat-label">Tahun</span></div>
         </div>
         <h3 class="modal-section-title">${studioLabel}</h3>
-        <p style="color:rgba(255,255,255,0.6);margin-bottom:20px;font-size:0.9rem">${studioVal}</p>
+        <p style="color:rgba(255,255,255,0.55);margin-bottom:20px;font-size:0.88rem">${studioVal}</p>
         ${a.genres.length ? `<h3 class="modal-section-title">Genre</h3><div class="modal-genres">${genreHtml}</div>` : ''}
         <h3 class="modal-section-title">Sinopsis</h3>
-        <div class="modal-synopsis" id="synopsisText"><span style="opacity:0.5">Menerjemahkan sinopsis...</span></div>
-        <a href="${a.url}" target="_blank" rel="noopener" class="modal-link">Lihat di MyAnimeList →</a>
+        <div class="modal-synopsis" id="synopsisText"><span style="opacity:0.4">Menerjemahkan sinopsis...</span></div>
+        ${a.url ? `<a href="${a.url}" target="_blank" rel="noopener" class="modal-link">Lihat di MyAnimeList →</a>` : ''}
       </div>`;
 
     document.getElementById('modalOverlay').classList.add('active');
 
-    // Translate synopsis to Indonesian
     const translated = await translateToId(a.synopsis);
     const synEl = document.getElementById('synopsisText');
     if (synEl) synEl.textContent = translated;
@@ -366,21 +432,19 @@
 
   // ===== BUBBLES =====
   function createBubbles() {
-    for (let i = 0; i < 18; i++) {
+    for (let i = 0; i < 16; i++) {
       const b = document.createElement('div');
       b.className = 'bubble';
-      const size = Math.random() * 30 + 8;
-      b.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;animation-duration:${Math.random()*12+8}s;animation-delay:${Math.random()*10}s;`;
+      const size = Math.random() * 28 + 6;
+      b.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;animation-duration:${Math.random()*14+8}s;animation-delay:${Math.random()*12}s;`;
       document.body.appendChild(b);
     }
   }
 
   // ===== EVENTS =====
   function bindEvents() {
-    // Search
     document.getElementById('searchInput').addEventListener('input', applyFilters);
 
-    // Filters
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -390,26 +454,23 @@
       });
     });
 
-    // View toggle
     document.querySelectorAll('.view-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         activeView = btn.dataset.view;
-        const g = document.getElementById('animeGrid');
-        g.classList.toggle('list-view', activeView === 'list');
+        document.getElementById('animeGrid').classList.toggle('list-view', activeView === 'list');
       });
     });
 
-    // Modal close
     document.getElementById('modalOverlay').addEventListener('click', (e) => {
       if (e.target.id === 'modalOverlay') e.target.classList.remove('active');
     });
+
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') document.getElementById('modalOverlay').classList.remove('active');
     });
 
-    // Back to top
     const btt = document.getElementById('backToTop');
     window.addEventListener('scroll', () => {
       btt.classList.toggle('visible', window.scrollY > 400);
@@ -419,64 +480,40 @@
 
   // ===== CUSTOM CURSOR =====
   function initCursor() {
-    // Skip on touch devices
-    if (window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(max-width: 768px)').matches) return;
+    if (window.matchMedia('(pointer: coarse)').matches) return;
 
-    const dot = document.getElementById('cursorDot');
+    const dot  = document.getElementById('cursorDot');
     const ring = document.getElementById('cursorRing');
     if (!dot || !ring) return;
 
     let mouseX = -100, mouseY = -100;
     let ringX = -100, ringY = -100;
-    const ringSpeed = 0.15;
+    const ringSpeed = 0.14;
 
-    // Smooth ring following via rAF
-    function animate() {
+    (function animate() {
       ringX += (mouseX - ringX) * ringSpeed;
       ringY += (mouseY - ringY) * ringSpeed;
       ring.style.left = ringX + 'px';
-      ring.style.top = ringY + 'px';
+      ring.style.top  = ringY + 'px';
       requestAnimationFrame(animate);
-    }
-    animate();
+    })();
 
-    // Mouse move - dot follows instantly
     document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+      mouseX = e.clientX; mouseY = e.clientY;
       dot.style.left = mouseX + 'px';
-      dot.style.top = mouseY + 'px';
-
-      if (!document.body.classList.contains('cursor-visible')) {
-        document.body.classList.add('cursor-visible');
-      }
-    });
-
-    // Mouse leave / enter page
-    document.addEventListener('mouseleave', () => {
-      document.body.classList.remove('cursor-visible');
-    });
-    document.addEventListener('mouseenter', () => {
+      dot.style.top  = mouseY + 'px';
       document.body.classList.add('cursor-visible');
     });
 
-    // Click effects
+    document.addEventListener('mouseleave', () => document.body.classList.remove('cursor-visible'));
+    document.addEventListener('mouseenter', () => document.body.classList.add('cursor-visible'));
     document.addEventListener('mousedown', () => document.body.classList.add('cursor-click'));
-    document.addEventListener('mouseup', () => document.body.classList.remove('cursor-click'));
+    document.addEventListener('mouseup',   () => document.body.classList.remove('cursor-click'));
 
-    // Hover detection with event delegation
     document.addEventListener('mouseover', (e) => {
-      const target = e.target;
-      const card = target.closest('.anime-card');
-      const interactive = target.closest('a, button, input, .filter-btn, .view-btn, .modal-close, .back-to-top, .genre-tag, .modal-link');
-
       document.body.classList.remove('cursor-hover', 'cursor-card');
-
-      if (card) {
-        document.body.classList.add('cursor-card');
-      } else if (interactive) {
-        document.body.classList.add('cursor-hover');
-      }
+      if      (e.target.closest('.anime-card')) document.body.classList.add('cursor-card');
+      else if (e.target.closest('a, button, input')) document.body.classList.add('cursor-hover');
     });
   }
 
