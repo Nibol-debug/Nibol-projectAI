@@ -36,4 +36,8 @@ Project ini terus berkembang dengan beberapa modul utama:
 ├── js/           # Interactive logic
 ├── anime.html    # Anime collection & insights
 ├── game.html     # Gaming stats & updates
+<<<<<<< HEAD
 └── index.html    # The Landing Page
+=======
+└── index.html    # The Landing Page
+>>>>>>> 08b6cd22530bdd9921d912b8eddab69f40047951
