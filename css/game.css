@@ -167,7 +167,7 @@ body::before {
   transform: translate(-50%, -50%) rotate(45deg);
   position: fixed;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 999999;
   box-shadow: 0 0 12px var(--gold), 0 0 24px rgba(212, 175, 55, 0.3);
   transition: transform 0.15s ease, width 0.2s ease, height 0.2s ease, opacity 0.15s ease;
   opacity: 0;
@@ -180,7 +180,7 @@ body::before {
   border-radius: 50%;
   position: fixed;
   pointer-events: none;
-  z-index: 9998;
+  z-index: 999998;
   transform: translate(-50%, -50%);
   transition: all 0.2s ease, opacity 0.15s ease;
   opacity: 0;
@@ -1516,4 +1516,10 @@ main {
   .haori-right {
     width: 4px;
   }
+}
+#imageModal {
+  transition: opacity 0.3s ease;
+}
+#imageModal img {
+  transition: transform 0.2s ease;
 }

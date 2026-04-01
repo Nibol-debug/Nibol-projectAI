@@ -1,90 +1,97 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anime List — 100 Terbaik</title>
+  <title>My Anime Nibol | Ocean Collection</title>
+  <meta name="description" content="Personal top 100 anime collection with an ocean-themed design. Curated list featuring the best anime series and movies.">
   <link rel="stylesheet" href="css/anime.css">
-  <link rel="shortcut icon" href="image/logov4.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
+
 <body>
+  <!-- Custom Cursor -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
 
-  <!-- CUSTOM CURSOR -->
-  <div class="cursor-dot"></div>
-  <div class="cursor-ring"></div>
-
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-grid"></div>
-    <div class="hero-orb hero-orb-1"></div>
-    <div class="hero-orb hero-orb-2"></div>
-    <div class="hero-orb hero-orb-3"></div>
-
-    <div class="hero-content">
-      <div class="hero-badge">
-        <span>✦</span>
-        <span>Koleksi Pilihan</span>
-        <span>✦</span>
-      </div>
-      <h1 class="hero-title">
-        <span class="word-1">TOP 100</span><br>
-        <span class="word-2">ANIME LIST MY FAV GUE</span>
-      </h1>
-      <p class="hero-sub">Koleksi anime terbaik yang wajib kamu tonton, dikurasi dengan cermat untuk para pecinta anime.</p>
-    </div>
-
-    <div class="scroll-indicator">
-      <span>SCROLL</span>
-      <div class="scroll-arrow"></div>
-    </div>
-
-    <!-- Wave SVG -->
-    <svg class="hero-wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" preserveAspectRatio="none">
-      <path fill="#07090f" d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80Z"/>
-    </svg>
+  <!-- Ocean Background -->
+  <div class="ocean-bg">
+    <div class="wave wave-1"></div>
+    <div class="wave wave-2"></div>
+    <div class="wave wave-3"></div>
   </div>
+  <div class="light-rays"></div>
 
-  <!-- MAIN CONTENT -->
-  <div class="container">
-
-    <!-- STATS -->
-    <div class="stats-bar" id="statsBar"></div>
-
-    <!-- FILTER BOX -->
-    <div class="filter-box">
-      <div class="search-wrap">
-        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-          <circle cx="11" cy="11" r="8"/>
-          <path d="m21 21-4.35-4.35"/>
-        </svg>
-        <input type="text" class="search-input" id="searchInput" placeholder="Cari anime favorit kamu...">
-      </div>
-
-      <div class="filter-section">
-        <span class="filter-label">🎭 Genre</span>
-        <div class="filter-tags" id="genreFilters"></div>
-      </div>
-
-      <div class="filter-row" style="margin-top:12px;">
-        <div class="filter-section" style="flex:1;">
-          <span class="filter-label">📌 Status</span>
-          <div class="filter-tags" id="statusFilters"></div>
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Hero -->
+    <section class="hero" id="heroSection">
+      <h1 class="hero-title">🌊 My Anime Nibol</h1>
+      <p class="hero-subtitle">— Top 100 Personal Favorites —</p>
+      <div class="hero-divider"></div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number" id="totalAnime">0</span>
+          <span class="stat-label">Total Anime</span>
         </div>
-        <div class="filter-section">
-          <span class="filter-label">🔃 Urutkan</span>
-          <div class="filter-tags" id="sortFilters"></div>
+        <div class="stat-item">
+          <span class="stat-number" id="avgScore">0.0</span>
+          <span class="stat-label">Avg Score</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="totalEpisodes">0</span>
+          <span class="stat-label">Episodes</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Controls -->
+    <div class="controls-bar" id="controlsBar">
+      <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search anime...">
+      </div>
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="TV">TV</button>
+      <button class="filter-btn" data-filter="Movie">Movie</button>
+      <button class="filter-btn" data-filter="OVA">OVA</button>
+      <div class="view-toggle">
+        <button class="view-btn active" data-view="grid" title="Grid View">⊞</button>
+        <button class="view-btn" data-view="list" title="List View">☰</button>
+      </div>
+    </div>
+
+    <!-- Anime Grid -->
+    <div class="anime-grid-container">
+      <div class="anime-grid" id="animeGrid">
+        <div class="loading-container" id="loadingState">
+          <div class="loading-spinner"></div>
+          <div class="loading-text">Diving into the ocean of anime...</div>
+          <div class="loading-progress">
+            <div class="loading-progress-bar" id="progressBar"></div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- RESULT INFO -->
-    <p class="result-count" id="resultCount"></p>
-
-    <!-- ANIME LIST -->
-    <div class="anime-list" id="animeList"></div>
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Data from <a href="https://myanimelist.net" target="_blank" rel="noopener">MyAnimeList</a> via <a href="https://jikan.moe" target="_blank" rel="noopener">Jikan API</a></p>
+    </footer>
   </div>
+
+  <!-- Detail Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content" id="modalContent">
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+  </div>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" title="Back to top">↑</button>
 
   <script src="js/anime.js"></script>
 </body>
+
 </html>

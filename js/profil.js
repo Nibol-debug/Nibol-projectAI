@@ -117,3 +117,146 @@
       });
     });
   }
+  // Smooth scroll nav
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
+// ── MUSIC PLAYER ──
+const audio = document.getElementById('audio-player');
+const playPauseBtn = document.getElementById('play-pause-btn');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+const progressBar = document.getElementById('progress-bar');
+const currentTimeEl = document.getElementById('current-time');
+const durationEl = document.getElementById('duration');
+const trackTitle = document.getElementById('track-title');
+const trackArtist = document.getElementById('track-artist');
+const trackArt = document.getElementById('track-art');
+const playlistContainer = document.getElementById('playlist-items');
+const musicPlayer = document.getElementById('music-player');
+const closePlayer = document.getElementById('close-player');
+
+let currentTrackIndex = 0;
+let isPlaying = false;
+
+// Playlist (ganti link audio dengan milikmu nanti)
+const playlist = [
+  {
+    title: "TKJ 34 Juara",
+    artist: "Nibol × Chill Guy",
+    src: "https://files.catbox.moe/5hxr8c.mp3", // ganti nanti
+    emoji: "👑"
+  },
+  {
+    title: "Glue song",
+    artist: "beabadoobee",
+    src: "https://files.catbox.moe/w17kiy.mp3",
+    emoji: "🌳"
+  },
+  {
+    title: "Safe and Sound - Different Heaven",
+    artist: "NCS",
+    src: "https://files.catbox.moe/wqdsf0.mp3",
+    emoji: "🌧️"
+  }
+];
+
+function loadTrack(index) {
+  const track = playlist[index];
+  audio.src = track.src;
+  trackTitle.textContent = track.title;
+  trackArtist.textContent = track.artist;
+  trackArt.textContent = track.emoji;
+  playlistContainer.querySelectorAll('.playlist-item').forEach((el, i) => {
+    el.classList.toggle('active', i === index);
+  });
+}
+
+function togglePlay() {
+  if (isPlaying) {
+    audio.pause();
+    playPauseBtn.innerHTML = '▶';
+    musicPlayer.classList.remove('playing');
+  } else {
+    audio.play();
+    playPauseBtn.innerHTML = '❚❚';
+    musicPlayer.classList.add('playing');
+  }
+  isPlaying = !isPlaying;
+}
+
+function updateProgress() {
+  if (audio.duration) {
+    const progress = (audio.currentTime / audio.duration) * 100;
+    progressBar.value = progress;
+    currentTimeEl.textContent = formatTime(audio.currentTime);
+    durationEl.textContent = formatTime(audio.duration);
+  }
+}
+
+function formatTime(seconds) {
+  const min = Math.floor(seconds / 60);
+  const sec = Math.floor(seconds % 60);
+  return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+}
+
+// Render playlist
+function renderPlaylist() {
+  playlistContainer.innerHTML = '';
+  playlist.forEach((track, i) => {
+    const div = document.createElement('div');
+    div.className = 'playlist-item';
+    div.innerHTML = `
+      <span>${track.emoji} ${track.title}</span>
+      <span style="font-size:0.65rem;opacity:0.6;">${track.artist}</span>
+    `;
+    div.addEventListener('click', () => {
+      currentTrackIndex = i;
+      loadTrack(currentTrackIndex);
+      audio.play();
+      isPlaying = true;
+      playPauseBtn.innerHTML = '❚❚';
+      musicPlayer.classList.add('playing');
+    });
+    playlistContainer.appendChild(div);
+  });
+}
+
+// Event listeners
+playPauseBtn.addEventListener('click', togglePlay);
+prevBtn.addEventListener('click', () => {
+  currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+  loadTrack(currentTrackIndex);
+  if (isPlaying) audio.play();
+});
+nextBtn.addEventListener('click', () => {
+  currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+  loadTrack(currentTrackIndex);
+  if (isPlaying) audio.play();
+});
+progressBar.addEventListener('input', () => {
+  audio.currentTime = (progressBar.value / 100) * audio.duration;
+});
+audio.addEventListener('timeupdate', updateProgress);
+audio.addEventListener('ended', () => {
+  currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+  loadTrack(currentTrackIndex);
+  audio.play();
+});
+
+closePlayer.addEventListener('click', () => {
+  musicPlayer.classList.add('hidden');
+  if (isPlaying) audio.pause();
+});
+
+// Inisialisasi
+window.addEventListener('load', () => {
+  loadTrack(currentTrackIndex);
+  renderPlaylist();
+});

@@ -17,13 +17,17 @@ const isTouchDevice = window.matchMedia('(pointer: coarse)').matches
 const enableCustomCursor = !isTouchDevice && blade && ring;
 
 if (enableCustomCursor) {
-  document.addEventListener('mousemove', e => {
+  // Update cursor position — listener di document DAN window
+  // agar tetap aktif saat modal overlay terbuka
+  function updateCursorPos(e) {
     mx = e.clientX; my = e.clientY;
     blade.style.left = mx + 'px'; blade.style.top = my + 'px';
     if (!document.body.classList.contains('cursor-active')) {
       document.body.classList.add('cursor-active');
     }
-  });
+  }
+  document.addEventListener('mousemove', updateCursorPos);
+  window.addEventListener('mousemove', updateCursorPos);
 
   (function animCursor() {
     rx += (mx - rx) * 0.13;
@@ -351,21 +355,29 @@ document.querySelectorAll('.game-photo').forEach(img => {
     modalImg.src = img.src;
     modal.style.display = 'flex';
     resetModal();
-    // langsung zoom saat modal terbuka agar responsif
-    setModalZoom(2);
+    // Tidak auto-zoom — biarkan user klik/scroll untuk zoom
   });
 });
 
 const closeModal = document.getElementById('closeModal');
 const imageModal = document.getElementById('imageModal');
+
+function closeImageModal() {
+  imageModal.style.display = 'none';
+  // Paksa cursor kustom aktif kembali setelah modal tutup
+  if (enableCustomCursor) {
+    document.body.classList.add('cursor-active');
+  }
+}
+
 if (closeModal && imageModal && modalImg) {
   closeModal.addEventListener('click', e => {
     e.stopPropagation();
-    imageModal.style.display = 'none';
+    closeImageModal();
   });
 
   imageModal.addEventListener('click', () => {
-    imageModal.style.display = 'none';
+    closeImageModal();
   });
 
   modalImg.addEventListener('click', e => {

@@ -18,11 +18,18 @@
   <div class="cursor" id="cursor"></div>
   <div class="cursor-ring" id="cursorRing"></div>
 
-  <!-- Nav -->
   <nav id="navbar">
-    <a class="nav-logo" href="#"><span>N</span>IBOL</a>
-    <div style="font-size:0.65rem;letter-spacing:0.3em;color:rgba(245,240,239,0.35);">TKJ · RGi · ANGKATAN 34</div>
-  </nav>
+  <a class="nav-logo" href="#"><span>N</span>IBOL</a>
+  
+  <div class="nav-links">
+    <a href="#about">Tentang</a>
+    <a href="#explore">Jelajahi</a>
+    <a href="#projects">Karya</a>
+    <a href="#social">Connect</a>
+  </div>
+
+  <div style="font-size:0.65rem;letter-spacing:0.3em;color:rgba(245,240,239,0.35);">TKJ · RGi · ANGKATAN 34</div>
+</nav>
 
   <!-- ── HERO ── -->
   <div class="hero">
@@ -237,6 +244,38 @@
     </div>
   </section>
 
+  <hr class="divider">
+  <section id="projects" class="reveal">
+    <div style="text-align:center;">
+      <p class="section-label">プロジェクト · Karya Terpilih</p>
+      <h2 class="section-title" style="text-align:center;">Sigma Projects</h2>
+    </div>
+
+    <div class="projects-grid">
+      <div class="project-card">
+        <span class="project-badge">Web Development</span>
+        <h3>Tugas Branching 5 Pilihan</h3>
+        <p>Aplikasi web grading interaktif dengan feedback visual menggunakan GIF. Dibangun dengan logika percabangan untuk berbagai rentang nilai.</p>
+        <div class="tags">
+          <span class="tag">PHP8</span>
+          <span class="tag">Bootstrap 5</span>
+          <span class="tag">HTML5</span>
+          <span class="tag">Javascript</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <span class="project-badge">Networking</span>
+        <h3>Simulasi Jaringan & DHCP</h3>
+        <p>Konfigurasi topologi jaringan terpusat meliputi setup router, multiple switch, dan otomatisasi IP address menggunakan DHCP Server.</p>
+        <div class="tags">
+          <span class="tag">Cisco Packet Tracer</span>
+          <span class="tag">Routing</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ── BIG QUOTE ── -->
   <div class="quote-section reveal">
     <p class="big-quote">
@@ -321,6 +360,46 @@
       富士山の麓から · Dari kaki Gunung Fuji
     </p>
   </footer>
+  
+  <!-- ── MUSIC PLAYER ── -->
+<div id="music-player" class="music-player">
+  <div class="player-header">
+    <div class="now-playing">
+      <span class="sakura-dot">🌸</span>
+      <span class="player-label">NOW PLAYING</span>
+    </div>
+    <button id="close-player" class="player-close">✕</button>
+  </div>
+
+  <div class="track-info">
+    <div id="track-art" class="track-art"></div>
+    <div>
+      <p id="track-title" class="track-title">Fuji Lo-Fi Nights</p>
+      <p id="track-artist" class="track-artist">Nibol × Chill Guy</p>
+    </div>
+  </div>
+
+  <audio id="audio-player" preload="metadata"></audio>
+
+  <div class="progress-container">
+    <span id="current-time" class="time">0:00</span>
+    <input type="range" id="progress-bar" min="0" max="100" value="0">
+    <span id="duration" class="time">0:00</span>
+  </div>
+
+  <div class="controls">
+    <button id="prev-btn" class="ctrl-btn">⏮</button>
+    <button id="play-pause-btn" class="ctrl-btn play">▶</button>
+    <button id="next-btn" class="ctrl-btn">⏭</button>
+    <button id="volume-btn" class="ctrl-btn">🔊</button>
+  </div>
+
+  <!-- Playlist -->
+  <div class="playlist">
+    <div class="playlist-title">Playlist • Chill Fuji Vibes</div>
+    <div id="playlist-items"></div>
+  </div>
+</div>
 
   <script src="js/profil.js"></script>
 </body>
